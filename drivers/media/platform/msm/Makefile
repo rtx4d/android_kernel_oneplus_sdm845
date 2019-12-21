@@ -10,6 +10,8 @@ ifeq ($(CONFIG_SPECTRA2_CAMERA), y)
 obj-$(CONFIG_SPECTRA_CAMERA) += camera_v3/
 else ifeq ($(CONFIG_ONEPLUS_DIR_CAMERA),y)
 obj-$(CONFIG_SPECTRA_CAMERA) += camera_oneplus/
+else ifeq ($(CONFIG_XIAOMI_DIR_CAMERA),y)
+obj-$(CONFIG_SPECTRA_CAMERA) += camera_xiaomi/
 else
 obj-$(CONFIG_SPECTRA_CAMERA) += camera/
 endif
