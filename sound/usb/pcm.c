@@ -492,6 +492,8 @@ static int set_sync_endpoint(struct snd_usb_substream *subs,
 	return 0;
 }
 
+extern void kick_usbpd_vbus_sm(void);
+
 /*
  * find a matching format and set up the interface
  */
@@ -543,10 +545,8 @@ static int set_format(struct snd_usb_substream *subs, struct audioformat *fmt)
 				"%d:%d: usb_set_interface failed (%d)\n",
 				fmt->iface, fmt->altsetting, err);
 /*2018/03/19 handle xiaomi typec headset dsp crash issue*/
-			if ((USB_ID_VENDOR(subs->stream->chip->usb_id)
-				== 0x2717) &&
-				(USB_ID_PRODUCT(subs->stream->chip->usb_id)
-				== 0x3801)) {
+			if ((0x2717 == USB_ID_VENDOR(subs->stream->chip->usb_id))&&(0x3801 == USB_ID_PRODUCT(subs->stream->chip->usb_id)))
+			{
 				kick_usbpd_vbus_sm();
 			}
 			return -EIO;
