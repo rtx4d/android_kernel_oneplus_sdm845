@@ -7,6 +7,7 @@
  * Copyright (c) 2004 Jon Smirl <jonsmirl@gmail.com>
  * Copyright (c) 2003-2004 Greg Kroah-Hartman <greg@kroah.com>
  * Copyright (c) 2003-2004 IBM Corp.
+ * Copyright (C) 2019 XiaoMi, Inc.
  *
  * This file is released under the GPLv2
  *
@@ -473,6 +474,74 @@ static ssize_t oneplus_display_set_dim_alpha(struct device *dev,
 		return ret;
 	}
 
+extern int drm_get_panel_info(struct drm_bridge *bridge, char *name);
+static ssize_t panel_info_show(struct device *device,
+			    struct device_attribute *attr,
+			   char *buf)
+{
+	int written = 0;
+	char pname[128] = {0};
+	struct drm_connector *connector = NULL;
+	struct drm_encoder *encoder = NULL;
+	struct drm_bridge *bridge = NULL;
+
+	connector = to_drm_connector(device);
+	if (!connector)
+		return written;
+
+	encoder = connector->encoder;
+	if (!encoder)
+		return written;
+
+	bridge = encoder->bridge;
+	if (!bridge)
+		return written;
+
+	written = drm_get_panel_info(bridge, pname);
+	if (written)
+		return snprintf(buf, PAGE_SIZE, "panel_name=%s\n", pname);
+
+	return written;
+}
+
+static ssize_t doze_brightness_show(struct device *device,
+			    struct device_attribute *attr,
+			   char *buf)
+{
+	struct drm_connector *connector = to_drm_connector(device);
+	struct drm_device *dev = connector->dev;
+
+	return snprintf(buf, PAGE_SIZE, "%d\n",
+			dev->doze_brightness);
+}
+
+void drm_bridge_disp_param_set(struct drm_bridge *bridge, int cmd);
+static ssize_t disp_param_store(struct device *device,
+			   struct device_attribute *attr,
+			   const char *buf, size_t count)
+{
+	int param;
+
+	struct drm_connector *connector = NULL;
+	struct drm_encoder *encoder = NULL;
+	struct drm_bridge *bridge = NULL;
+
+	connector = to_drm_connector(device);
+	if (!connector)
+		return count;
+
+	encoder = connector->encoder;
+	if (!encoder)
+		return count;
+
+	bridge = encoder->bridge;
+	if (!bridge)
+		return count;
+
+	sscanf(buf, "0x%x", &param);
+
+	drm_bridge_disp_param_set(bridge, param);
+
 	return count;
 }
 
@@ -577,6 +646,106 @@ extern  ssize_t oneplus_display_notify_aod_hid(struct device *dev,
 		const char *buf, size_t count);
 
 /******************************************************************/
+ssize_t drm_bridge_disp_param_get(struct drm_bridge *bridge, char *pbuf);
+static ssize_t disp_param_show(struct device *device,
+			   struct device_attribute *attr,
+			   char *buf)
+{
+	ssize_t ret = 0;
+	struct drm_connector *connector = NULL;
+	struct drm_encoder *encoder = NULL;
+	struct drm_bridge *bridge = NULL;
+
+	connector = to_drm_connector(device);
+	if (!connector)
+		return ret;
+
+	encoder = connector->encoder;
+	if (!encoder)
+		return ret;
+
+	bridge = encoder->bridge;
+	if (!bridge)
+		return ret;
+
+	ret = drm_bridge_disp_param_get(bridge, buf);
+
+	return ret;
+}
+
+void drm_bridge_disp_count_set(struct drm_bridge *bridge, const char *buf);
+static ssize_t disp_count_store(struct device *device,
+			   struct device_attribute *attr,
+			   const char *buf, size_t count)
+{
+	struct drm_connector *connector = NULL;
+	struct drm_encoder *encoder = NULL;
+	struct drm_bridge *bridge = NULL;
+
+	connector = to_drm_connector(device);
+	if (!connector)
+		return count;
+
+	encoder = connector->encoder;
+	if (!encoder)
+		return count;
+
+	bridge = encoder->bridge;
+	if (!bridge)
+		return count;
+
+	drm_bridge_disp_count_set(bridge, buf);
+
+	return count;
+}
+
+ssize_t drm_bridge_disp_count_get(struct drm_bridge *bridge, char *buf);
+static ssize_t disp_count_show(struct device *device,
+			   struct device_attribute *attr,
+			   char *buf)
+{
+	ssize_t ret = 0;
+	struct drm_connector *connector = NULL;
+	struct drm_encoder *encoder = NULL;
+	struct drm_bridge *bridge = NULL;
+
+	connector = to_drm_connector(device);
+	if (!connector)
+		return ret;
+
+	encoder = connector->encoder;
+	if (!encoder)
+		return ret;
+
+	bridge = encoder->bridge;
+	if (!bridge)
+		return ret;
+
+	ret = drm_bridge_disp_count_get(bridge, buf);
+
+	return ret;
+}
+
+extern ssize_t mipi_reg_write(char *buf, size_t count);
+extern ssize_t mipi_reg_read(char *buf);
+
+static ssize_t mipi_reg_show(struct device *device,
+			    struct device_attribute *attr,
+			   char *buf)
+{
+	return mipi_reg_read(buf);
+}
+
+static ssize_t mipi_reg_store(struct device *device,
+			   struct device_attribute *attr,
+			   const char *buf, size_t count)
+{
+	int rc = 0;
+
+	rc = mipi_reg_write((char *)buf, count);
+	return rc;
+}
+
 static DEVICE_ATTR_RW(status);
 static DEVICE_ATTR_RO(enabled);
 static DEVICE_ATTR_RO(dpms);
@@ -607,6 +776,11 @@ static DEVICE_ATTR(dither_en, S_IRUGO|S_IWUSR,
 static DEVICE_ATTR(dimlayer_bl_en, S_IRUGO|S_IWUSR,
 	op_display_get_dimlayer_enable, op_display_set_dimlayer_enable);
 
+static DEVICE_ATTR_RO(panel_info);
+static DEVICE_ATTR_RW(disp_param);
+static DEVICE_ATTR_RO(doze_brightness);
+static DEVICE_ATTR_RW(disp_count);
+static DEVICE_ATTR_RW(mipi_reg);
 
 static struct attribute *connector_dev_attrs[] = {
 	&dev_attr_status.attr,
@@ -629,6 +803,11 @@ static struct attribute *connector_dev_attrs[] = {
 	&dev_attr_dimlayer_bl_en.attr,
 	&dev_attr_dp_en.attr,
 	&dev_attr_dither_en.attr,
+	&dev_attr_panel_info.attr,
+	&dev_attr_disp_param.attr,
+	&dev_attr_doze_brightness.attr,
+	&dev_attr_disp_count.attr,
+	&dev_attr_mipi_reg.attr,
 	NULL
 };
 
