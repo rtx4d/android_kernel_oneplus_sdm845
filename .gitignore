@@ -120,8 +120,3 @@ all.config
 kernel/configs/android-*.cfg
 
 drivers/oneplus
-
-#
-#Ignoring Android.bp link file
-#
-Android.bp
