@@ -28,6 +28,18 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
         fajita-pvt-v2.1-spec-overlay.dtbo \
         fajita-mp-v2.1-spec-overlay.dtbo
 
+polaris-p0-overlay.dtbo-base := sdm845.dtb
+polaris-p0-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p1-overlay.dtbo-base := sdm845.dtb
+polaris-p1-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p1-v2.1-overlay.dtbo-base := sdm845-v2.1.dtb
+polaris-p2-overlay.dtbo-base := sdm845.dtb
+polaris-p2-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p2-v2.1-overlay.dtbo-base := sdm845-v2.1.dtb
+polaris-p3-overlay.dtbo-base := sdm845.dtb
+polaris-p3-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p3-v2.1-overlay.dtbo-base := sdm845-v2.1.dtb
+
 sdm845-mtp-overlay.dtbo-base := sdm845.dtb
 sdm845-v2-mtp-overlay.dtbo-base := sdm845-v2.dtb
 sdm845-v2.1-mtp-overlay.dtbo-base := sdm845-v2.1.dtb
@@ -99,7 +111,18 @@ else ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),n)
 		sda845-v2.1-4k-panel-qrd-overlay.dtbo \
 		sda845-v2.1-cdp-sdxpoorwills-overlay.dtbo \
 		sda845-v2.1-mtp-sdxpoorwills-overlay.dtbo \
-		sda845-v2-mtp-sdxpoorwills-overlay.dtbo
+		sda845-v2-mtp-sdxpoorwills-overlay.dtbo \
+		polaris-p0-overlay.dtbo  \
+		polaris-p0-v2-overlay.dtbo \
+		polaris-p1-overlay.dtbo  \
+		polaris-p1-v2-overlay.dtbo \
+		polaris-p1-v2.1-overlay.dtbo \
+		polaris-p2-overlay.dtbo  \
+		polaris-p2-v2-overlay.dtbo \
+		polaris-p2-v2.1-overlay.dtbo \
+		polaris-p3-overlay.dtbo  \
+		polaris-p3-v2-overlay.dtbo \
+		polaris-p3-v2.1-overlay.dtbo
 
 sdm845-cdp-overlay.dtbo-base := sdm845.dtb
 sdm845-mtp-overlay.dtbo-base := sdm845.dtb
@@ -164,7 +187,21 @@ dtb-$(CONFIG_ARCH_SDM845) += sdm845-sim.dtb \
 	sdm845-interposer-sdm670-mtp.dtb \
 	sdm845-interposer-sdm670-cdp.dtb \
 	sdm845-v2.1-rb3.dtb \
-	sdm845-v2.1-mtp.dtb
+	sdm845-v2.1-mtp.dtb \
+	polaris-p0.dtb \
+	polaris-p0-v2.dtb \
+	polaris-p1.dtb \
+	polaris-p1-v2.dtb \
+	polaris-p1-v2.1.dtb \
+	polaris-p2.dtb \
+	polaris-p2-v2.dtb \
+	polaris-p2-v2.1.dtb \
+	polaris-p3.dtb \
+	polaris-p3-v2.dtb \
+	polaris-p3-v2.1.dtb \
+	polaris-mp.dtb \
+	polaris-mp-v2.dtb \
+	polaris-mp-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
