@@ -26,7 +26,18 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
         fajita-pvt-v2.1-bu-overlay.dtbo \
         fajita-pvt-v2.1-v1-overlay.dtbo \
         fajita-pvt-v2.1-spec-overlay.dtbo \
-        fajita-mp-v2.1-spec-overlay.dtbo
+        fajita-mp-v2.1-spec-overlay.dtbo \
+        polaris-p0-overlay.dtbo  \
+        polaris-p0-v2-overlay.dtbo \
+        polaris-p1-overlay.dtbo  \
+        polaris-p1-v2-overlay.dtbo \
+        polaris-p1-v2.1-overlay.dtbo \
+        polaris-p2-overlay.dtbo  \
+        polaris-p2-v2-overlay.dtbo \
+        polaris-p2-v2.1-overlay.dtbo \
+        polaris-p3-overlay.dtbo  \
+        polaris-p3-v2-overlay.dtbo \
+        polaris-p3-v2.1-overlay.dtbo
 
 sdm845-mtp-overlay.dtbo-base := sdm845.dtb
 sdm845-v2-mtp-overlay.dtbo-base := sdm845-v2.dtb
@@ -52,6 +63,17 @@ fajita-pvt-v2.1-bu-overlay.dtbo-base := sdm845-v2.1.dtb
 fajita-pvt-v2.1-v1-overlay.dtbo-base := sdm845-v2.1.dtb
 fajita-pvt-v2.1-spec-overlay.dtbo-base := sdm845-v2.1.dtb
 fajita-mp-v2.1-spec-overlay.dtbo-base := sdm845-v2.1.dtb
+polaris-p0-overlay.dtbo-base := sdm845.dtb
+polaris-p0-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p1-overlay.dtbo-base := sdm845.dtb
+polaris-p1-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p1-v2.1-overlay.dtbo-base := sdm845-v2.1.dtb
+polaris-p2-overlay.dtbo-base := sdm845.dtb
+polaris-p2-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p2-v2.1-overlay.dtbo-base := sdm845-v2.1.dtb
+polaris-p3-overlay.dtbo-base := sdm845.dtb
+polaris-p3-v2-overlay.dtbo-base := sdm845-v2.dtb
+polaris-p3-v2.1-overlay.dtbo-base := sdm845-v2.1.dtb
 
 
 else ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),n)
